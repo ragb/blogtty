@@ -72,13 +72,16 @@ def main():
     blog = make_blog(options.config, options.blog)
     
     #read file contents
-    if options.file:
-        f = open(options.file, "r")
-        contents = f.read()
-        f.close()
-    else:
-        contents = sys.stdin.read()
-    
+    try:
+        if options.file:
+            f = open(options.file, "r")
+            contents = f.read()
+            f.close()
+        else:
+            contents = sys.stdin.read()
+    except Exception,e:
+        print e
+        exit(-1)
     if options.categories:
         categories = options.categories.split(',')
     else:
@@ -91,7 +94,11 @@ def main():
             time = datetime.datetime.strptime(options.datetime, options.datetimeformat)
         else:
             time = None
-    postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time)
+    try:
+            postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time)
+    except Exception, e:
+        print e
+        exit(-1)
     if postid and options.verbose:
         print "Post Created"
 

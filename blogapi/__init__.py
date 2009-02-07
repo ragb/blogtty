@@ -37,7 +37,7 @@ class BlogServer(object):
         if categories: struct['categories'] = categories
         if keywords: struct['mt_keywords'] = keywords
         #if we have a date use it, if not don't supply one, it will default to now
-        if date: struct['pubDate'] = date
+        if date: struct['pubDate'] = date.isoformat()
         
         #now post it to server
         return bool(self.server.metaWeblog.newPost(self.id, self.user, self.password, struct, publish))
