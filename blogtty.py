@@ -27,6 +27,12 @@ import datetime
 __version__ = "0.1.0"
 __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
 
+def get_home():
+    if os.name == 'nt': #Windows sucks...
+        return os.path.join(os.getenv("HOMEDRIVE"), os.getenv("HOMEPATH"))
+    else:
+        return os.getenv("HOME")
+
 def get_cli_parser(user, defaultconfigfile):
     """ Creates a command line parser for this application """
     parser = OptionParser(usage="%prog [options] [url]", version=__version__)
@@ -65,7 +71,7 @@ def make_blog(configfile, blogname):
 
 def main():
     user = os.getenv("$USER")
-    home = os.getenv("HOME")
+    home = get_home()
     defaultconfigfile = os.path.join(home, ".blogtty")
     parser = get_cli_parser(user, defaultconfigfile)
     options, args = parser.parse_args()
