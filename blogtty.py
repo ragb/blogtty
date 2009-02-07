@@ -22,6 +22,7 @@ from blogapi import BlogServer
 import sys, os
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser as ConfigParser
+import datetime
 
 __version__ = "0.1.0"
 __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
@@ -46,7 +47,10 @@ def get_cli_parser(user, defaultconfigfile):
     #-K, --keywords: coma separated list of tags to use
     parser.add_option("-K", "--keywords", type="string", help="Coma separated list of tags do use")
     #-D, --date, publication date of the post
-    parser.add_option("-D", "--datetime", type="string", help="Post publication date time, default is current date and time")
+    parser.add_option("--datetime", type="string", help="Post publication date time, use current local format. Default is current date and time")
+    #--datetimeformat: format to use when parsing dates" and times
+    parser.add_option("--datetimeformate", type="string", default="%Y-%m-%d %H:%M", dest="datetimeformat",
+    help="Specifies the format to parse the string supplied with --datetime, default is %default", metavar="format")
     return parser
 
 def make_blog(configfile, blogname):
@@ -83,7 +87,11 @@ def main():
         keywords = options.keywords.split(',')
     else:
         keywords = []
-    postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords)
+        if options.datetime:
+            time = datetime.datetime.strptime(options.datetime, options.datetimeformat)
+        else:
+            time = None
+    postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time)
     if postid and options.verbose:
         print "Post Created"
 
