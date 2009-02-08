@@ -48,6 +48,9 @@ def get_cli_parser(user, defaultconfigfile):
     parser.add_option("-b", "--blog", type="string", default="default", help="Blog name to use from configuration file, default is %default")
     #-t, --title to define new post title
     parser.add_option("-T", "--title", type="string", help="Set post title")
+    #-D, --draft: don't publish post
+    parser.add_option("-D", "--draft", dest="publish", action="store_false", default="True",
+    help="Post as draft")
     #-C, --categories: coma separated list of categories to post
     parser.add_option("-C", "--categories", type="string", help="Coma separated list of categories do use")
     #-K, --keywords: coma separated list of tags to use
@@ -100,7 +103,7 @@ def main():
     if options.datetime:
         time = datetime.datetime.strptime(options.datetime, options.datetimeformat)
     try:
-            postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time)
+            postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time, publish=options.publish)
     except Exception, e:
         print e
         exit(-1)
