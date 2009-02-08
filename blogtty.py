@@ -26,6 +26,7 @@ import datetime
 
 __version__ = "0.1.0"
 __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
+__lisence__ = "GPL"
 
 def get_home():
     if os.name == 'nt': #Windows sucks...
@@ -33,7 +34,16 @@ def get_home():
     else:
         return os.getenv("HOME")
 
-def get_cli_parser(user, defaultconfigfile):
+def get_configfiles_list():
+    list = []
+    #try first in home
+    list.append(os.path.join(get_home(), ".blogtty"))
+    #try finding a blogtty.conf ffile in current directory
+    list.append("blogtty.conf")
+    #TODO: more locations to search
+    return list
+
+def get_cli_parser():
     """ Creates a command line parser for this application """
     parser = OptionParser(usage="%prog [options]", version=__version__)
     
@@ -41,7 +51,8 @@ def get_cli_parser(user, defaultconfigfile):
     # -v, --verbose: outputs information
     parser.add_option("-v", "--verbose", action="store_true", help="Outputs status information about performed actions")
     #-c, --config: configuration file to use, defualt is ~/.wpcli if exists
-    parser.add_option("-c", "--config", metavar="configfile", type="string", default=defaultconfigfile, help="Configuration file to use, default is %s if exitsts" % defaultconfigfile)
+    parser.add_option("-c", "--config", metavar="configfile", type="string", 
+    help="Configuration file to use, if not provided the program will try to find a .blogtty file in your home or a blogtty.conf file in current directory")
     #-f, --file: file name to read contents from
     parser.add_option("-f", "--file", type="string", dest="file", help="File name to read from, if not provided defaults to standarnd input")
     #-b, --blog, name of blog to use from config file, default is "default"
@@ -62,10 +73,10 @@ def get_cli_parser(user, defaultconfigfile):
     help="Specifies the format to parse the string supplied with --datetime, default is %default", metavar="format")
     return parser
 
-def make_blog(configfile, blogname):
+def make_blog(configfiles, blogname):
     #read configuration file
     config = ConfigParser()
-    config.read(configfile)
+    config.read(configfiles)
     url = config.get(blogname, 'url')
     id = config.getint(blogname, 'id')
     user = config.get(blogname, 'user')
@@ -73,12 +84,13 @@ def make_blog(configfile, blogname):
     return BlogServer(url, id, user, password)
 
 def main():
-    user = os.getenv("$USER")
-    home = get_home()
-    defaultconfigfile = os.path.join(home, ".blogtty")
-    parser = get_cli_parser(user, defaultconfigfile)
+    
+    parser = get_cli_parser()
     options, args = parser.parse_args()
-    blog = make_blog(options.config, options.blog)
+    configfiles = get_configfiles_list()
+    if options.config:
+        configfiles.preprend(options.config)
+    blog = make_blog(configfiles, options.blog)
     
     #read file contents
     try:

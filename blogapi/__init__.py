@@ -40,6 +40,26 @@ class BlogServer(object):
         if date: struct['pubDate'] = xmlrpclib.DateTime(date)
         
         #now post it to server
-        return bool(self.server.metaWeblog.newPost(self.id, self.user, self.password, struct, publish))
+        return int(self.server.metaWeblog.newPost(self.id, self.user, self.password, struct, publish))
 
+
+class Post(object):
+    """ Class to represent blog post objects """
+    
+    def __init__(self, content, title=None, categories=[], keywords=[], datetime=None, publish=True,
+    link=None, perma=None, id=None,
+    allow_comments=True, allow_pings=True, author=None, password=None):
+        self.content = content
+        self.title = title
+        self.categories = categories
+        self.keywords = keywords
+        self.datetime = datetime
+        self.publish = publish
+        self.link = link
+        self.perma = perma
+        self.id = id
+        self.allow_comments = allow_comments
+        self.allow_pings = allow_pings
+        self.author = author
+        self.password = password
 
