@@ -35,7 +35,7 @@ def get_home():
 
 def get_cli_parser(user, defaultconfigfile):
     """ Creates a command line parser for this application """
-    parser = OptionParser(usage="%prog [options] [url]", version=__version__)
+    parser = OptionParser(usage="%prog [options]", version=__version__)
     
     #SUPPORTED OPTIONS:
     # -v, --verbose: outputs information
@@ -43,7 +43,7 @@ def get_cli_parser(user, defaultconfigfile):
     #-c, --config: configuration file to use, defualt is ~/.wpcli if exists
     parser.add_option("-c", "--config", metavar="configfile", type="string", default=defaultconfigfile, help="Configuration file to use, default is %s if exitsts" % defaultconfigfile)
     #-f, --file: file name to read contents from
-    parser.add_option("-f", "--file", type="string", dest="file", help="File name to read from, if not provided defaults to standarnd intpu")
+    parser.add_option("-f", "--file", type="string", dest="file", help="File name to read from, if not provided defaults to standarnd input")
     #-b, --blog, name of blog to use from config file, default is "default"
     parser.add_option("-b", "--blog", type="string", default="default", help="Blog name to use from configuration file, default is %default")
     #-t, --title to define new post title
@@ -96,10 +96,9 @@ def main():
         keywords = options.keywords.split(',')
     else:
         keywords = []
-        if options.datetime:
-            time = datetime.datetime.strptime(options.datetime, options.datetimeformat)
-        else:
-            time = None
+    time = None
+    if options.datetime:
+        time = datetime.datetime.strptime(options.datetime, options.datetimeformat)
     try:
             postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time)
     except Exception, e:
