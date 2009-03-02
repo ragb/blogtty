@@ -1,5 +1,6 @@
 * Support editing and deleting of posts
 * Support creation, editing and deleting of pages
+* Support markups such as wikimarkup
 * Support Editing of comments
 * Support uploading of media files
 * Support atompub protocol
