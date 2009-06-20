@@ -31,14 +31,13 @@ class BlogServer(object):
         raise NotImplementedError
 
     def new_post(self, content, title=None, categories=[], keywords=[], date=None, publish=True):
-        struct = {"description": xmlrpclib.Binary(content)}
+        struct = {"description": content}
         
         if title: struct['title'] = title
         if categories: struct['categories'] = categories
         if keywords: struct['mt_keywords'] = keywords
         #if we have a date use it, if not don't supply one, it will default to now
         if date: struct['pubDate'] = xmlrpclib.DateTime(date)
-        
         
         #now post it to server
         return int(self.server.metaWeblog.newPost(self.id, self.user, self.password, struct, publish))
