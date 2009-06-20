@@ -31,8 +31,8 @@ class BlogServer(object):
         raise NotImplementedError
 
     def new_post(self, content, title=None, categories=[], keywords=[], date=None, publish=True):
-        struct = {"description": content}
-        
+        struct = {"description": xmlrpclib.Binary(content)}
+
         if title: struct['title'] = title
         if categories: struct['categories'] = categories
         if keywords: struct['mt_keywords'] = keywords
