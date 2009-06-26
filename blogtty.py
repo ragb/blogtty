@@ -24,9 +24,9 @@ from optparse import OptionParser
 from ConfigParser import SafeConfigParser as ConfigParser
 import datetime
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
-__lisence__ = "GPL"
+__licence__ = "GPL"
 
 def get_home():
     if os.name == 'nt': #Windows sucks...
@@ -71,6 +71,8 @@ def get_cli_parser():
     #--datetimeformat: format to use when parsing dates" and times
     parser.add_option("--datetimeformate", type="string", default="%Y-%m-%d %H:%M", dest="datetimeformat",
     help="Specifies the format to parse the string supplied with --datetime, default is %default", metavar="format")
+    # --markup: defines the markup to use to render post (default ist none)
+    parser.add_option("--markup", type="string")
     return parser
 
 def make_blog(configfiles, blogname):
@@ -114,13 +116,16 @@ def main():
     time = None
     if options.datetime:
         time = datetime.datetime.strptime(options.datetime, options.datetimeformat)
+    if options.markup:
+        from blogapi.markup import render_markup
+        contents = render_markup(contents, options.markup)
     try:
             postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time, publish=options.publish)
     except Exception, e:
         print e
         exit(-1)
     if postid and options.verbose:
-        print "Post Created"
+        print "Post Created with id %d" % int(postid)
 
 
 if __name__ == '__main__':
