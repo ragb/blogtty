@@ -3,3 +3,5 @@
 * Support Editing of comments
 * Support uploading of media files
 * Support atompub protocol
+* Suport more markup styles
+* Refactor configuration to use python files instead of .ini for further customizations
