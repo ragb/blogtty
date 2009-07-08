@@ -19,7 +19,8 @@
 """ blogtty: a command line blogging tool """
 
 from blogapi import BlogServer
-import sys, os
+import sys
+import os, os.path
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser as ConfigParser
 import datetime
@@ -29,10 +30,7 @@ __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
 __licence__ = "GPL"
 
 def get_home():
-    if os.name == 'nt': #Windows sucks...
-        return os.path.join(os.getenv("HOMEDRIVE"), os.getenv("HOMEPATH"))
-    else:
-        return os.getenv("HOME")
+    return os.path.expanduser("~")
 
 def get_configfiles_list():
     list = []
