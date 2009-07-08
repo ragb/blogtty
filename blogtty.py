@@ -82,7 +82,11 @@ def make_blog(configfiles, blogname):
     url = config.get(blogname, 'url')
     id = config.getint(blogname, 'id')
     user = config.get(blogname, 'user')
-    password = config.get(blogname, 'password')
+    try:
+        password = config.get(blogname, 'password')
+    except:
+        from getpass import getpass
+        password = getpass("Enter blog password")
     return BlogServer(url, id, user, password)
 
 def main():
@@ -128,5 +132,13 @@ def main():
         print "Post Created with id %d" % int(postid)
 
 
+def onSIGINT(sig, stackFrame):
+    print "Caught interrupt signal, exiting"
+    sys.exit(-1)
+
 if __name__ == '__main__':
+    # Catch SIGINT
+    import signal
+    signal.signal(signal.SIGINT, onSIGINT)
+    
     main()

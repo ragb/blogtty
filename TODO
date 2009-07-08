@@ -5,3 +5,6 @@
 * Support atompub protocol
 * Suport more markup styles
 * Refactor configuration to use python files instead of .ini for further customizations
+* Ask for blog password when not present in configuration
+* Add switch to client to provide password overriding configuration
+* Handle sigint
