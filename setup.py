@@ -8,6 +8,6 @@ setup(
     author = 'Rui Batista',
     version = '0.1.1',
     author_email = 'rui.batista@ist.utl.pt',
-    packages = ['blogapi', 'blogapi.markup'],
+    packages = ['blogapi', 'blogapi.markup', 'blogapi.markup.wikicreole'],
     scripts = ['blogtty.py']
     )
