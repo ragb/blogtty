@@ -14,9 +14,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+"""wikicreole 1.0 plugin
+
+See spec at 
+http://www.wikicreole.org/wiki/Creole1.0#section-Creole1.0-ImageInline
+
+"""
+
 import creole, creole2html
 
 def render(content, *args, ** kwargs):
-    parser = creole.Parser(content)
+    parser = creole.Parser(content.encode('utf8', 'ignore'))
     document = parser.parse()
     return creole2html.HtmlEmitter(document).emit()
