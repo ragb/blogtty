@@ -9,4 +9,4 @@ http://pytextile.sourceforge.net
 import textile
 
 def render(content, *args, **kwargs):
-    return textile.Textiler(content).process()
+    return textile.textile(content, encoding='utf-8', output='utf-8')
