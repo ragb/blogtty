@@ -29,13 +29,11 @@ __version__ = "0.1.1"
 __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
 __licence__ = "GPL"
 
-def get_home():
-    return os.path.expanduser("~")
-
 def get_configfiles_list():
     list = []
-    #try first in home
-    list.append(os.path.join(get_home(), ".blogtty"))
+    # Try first in home config dir acording to xdg
+    from xdg.BaseDirectory import xdg_config_home
+    list.append(os.path.join(xdg_config_home, "blogtty/blogtty.conf"))
     #try finding a blogtty.conf ffile in current directory
     list.append("blogtty.conf")
     #TODO: more locations to search
