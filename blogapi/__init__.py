@@ -40,7 +40,9 @@ class BlogServer(object):
         if date: struct['pubDate'] = xmlrpclib.DateTime(date)
         
         #now post it to server
-        return int(self.server.metaWeblog.newPost(self.id, self.user, self.password, struct, publish))
+        id = int(self.server.metaWeblog.newPost(self.id, self.user, self.password, struct, publish))
+        published = self.server.metaWeblog.getPost(id, self.user, self.password)
+        return published
 
 
 class Post(object):

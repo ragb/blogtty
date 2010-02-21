@@ -24,6 +24,7 @@ import os, os.path
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser as ConfigParser
 import datetime
+import webbrowser
 
 __version__ = "0.1.1"
 __author__ = "Rui Batista <rui.batista@ist.utl.pt>"
@@ -69,6 +70,9 @@ def get_cli_parser():
     help="Specifies the format to parse the string supplied with --datetime, default is %default", metavar="format")
     # --markup: defines the markup to use to render post (default ist none)
     parser.add_option("--markup", type="string")
+    #-o, --open: open created post in web browser
+    parser.add_option("-o", "--open", dest="open", action="store_true", default="False",
+    help="Open created post in web browser")
     return parser
 
 def make_blog(configfiles, blogname):
@@ -120,13 +124,14 @@ def main():
         from blogapi.markup import render_markup
         contents = render_markup(contents, options.markup)
     try:
-            postid = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time, publish=options.publish)
+            post = blog.new_post(contents, title=options.title, categories=categories, keywords=keywords, date=time, publish=options.publish)
     except Exception, e:
         print e
         exit(-1)
-    if postid and options.verbose:
-        print "Post Created with id %d" % int(postid)
-
+    if post and options.verbose:
+        print "Post Created. Link on %s" % post['link']
+    if options.open:
+        webbrowser.open(post['link'])
 
 def onSIGINT(sig, stackFrame):
     print "Caught interrupt signal, exiting"
