@@ -131,7 +131,7 @@ def main():
     if post and options.verbose:
         print "Post Created. Link on %s" % post['link']
     if options.open:
-        webbrowser.open(post['link'])
+        webbrowser.open_new(post['link'])
 
 def onSIGINT(sig, stackFrame):
     print "Caught interrupt signal, exiting"
