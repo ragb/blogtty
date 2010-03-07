@@ -128,7 +128,7 @@ def main():
     except Exception, e:
         print e
         exit(-1)
-    if post and options.verbose:
+    if options.verbose:
         print "Post Created. Link on %s" % post['link']
     if options.open:
         webbrowser.open_new(post['link'])
